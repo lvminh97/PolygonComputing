@@ -7,10 +7,16 @@ using namespace std;
 struct Point{
     double x, y;
 
+    Point(double _x, double _y): x(_x), y(_y) {}
+
     Point &operator= (const Point &p){
         x = p.x;
         y = p.y;
         return (*this);
+    }
+
+    bool operator== (const Point &p){
+        return x == p.x && y == p.y;
     }
 };
 
@@ -20,6 +26,17 @@ struct LineSegment{
 
 vector<Point> points;
 vector<vector<LineSegment>> polygons;
+Point I;
+
+void readFile();
+vector<vector<Point>> findRectangle(Point p);
+
+int main(){
+    readFile();
+    cout << "Nhap toa do diem I: ";
+    cin >> I.x >> I.y;
+    return 0;
+}
 
 void readFile(){
     freopen("input.txt", "r", stdin);
@@ -27,6 +44,7 @@ void readFile(){
     cin >> N;
     for(int t = 0; t < N; t++){
         cin >> M;
+
         // init memory for polygon
         vector<LineSegment> polygon;
         for(int i = 0; i < M; i++){
@@ -46,10 +64,6 @@ void readFile(){
         }
         polygons.push_back(polygon);
     }
-}
-
-int main(){
-    readFile();
 #if DEBUG
     for(int i = 0; i < polygons.size(); i++){
         cout << "Polygon " << i + 1 << "\n";
@@ -58,5 +72,20 @@ int main(){
         }
     }
 #endif
-    return 0;
+}
+
+vector<vector<Point>> findRectangle(Point p){
+    vector<vector<Point>> res;
+    vector<Point> rect1, rect2;
+    rect1.push_back(Point(p.x - 1, p.y - 3));
+    rect1.push_back(Point(p.x - 1, p.y + 3));
+    rect1.push_back(Point(p.x + 1, p.y - 3));
+    rect1.push_back(Point(p.x + 1, p.y + 3));
+    res.push_back(rect1);
+    rect2.push_back(Point(p.x - 3, p.y - 1));
+    rect2.push_back(Point(p.x - 3, p.y + 1));
+    rect2.push_back(Point(p.x + 3, p.y - 1));
+    rect2.push_back(Point(p.x + 3, p.y + 1));
+    res.push_back(rect2);
+    return res;
 }
