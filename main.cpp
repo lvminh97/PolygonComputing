@@ -1,13 +1,14 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 using namespace std;
 
-#define DEBUG false
+#define DEBUG true
 
 struct Point{
     double x, y;
 
-    Point(double _x, double _y): x(_x), y(_y) {}
+    Point(double _x = 0, double _y = 0): x(_x), y(_y) {}
 
     Point &operator= (const Point &p){
         x = p.x;
@@ -39,12 +40,16 @@ int main(){
 }
 
 void readFile(){
-    freopen("input.txt", "r", stdin);
     int N, M;
-    cin >> N;
+    ifstream inputFile;
+    inputFile.open("input.txt");
+    if(!inputFile){
+        cout << "Can not read data from input file!\n";
+        return;
+    }
+    inputFile >> N;
     for(int t = 0; t < N; t++){
-        cin >> M;
-
+        inputFile >> M;
         // init memory for polygon
         vector<LineSegment> polygon;
         for(int i = 0; i < M; i++){
@@ -55,7 +60,7 @@ void readFile(){
         int prevId = 0;
         for(int i = 0; i < M; i++){
             Point newP;
-            cin >> newP.x >> newP.y;
+            inputFile >> newP.x >> newP.y;
             points.push_back(newP);
             if(i == 0) prevId = M - 1;
             else prevId = i - 1;
@@ -64,6 +69,7 @@ void readFile(){
         }
         polygons.push_back(polygon);
     }
+    inputFile.close();
 #if DEBUG
     for(int i = 0; i < polygons.size(); i++){
         cout << "Polygon " << i + 1 << "\n";
