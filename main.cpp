@@ -1,9 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include <vector>
 using namespace std;
 
-#define DEBUG true
+#define DEBUG false
 
 struct Point{
     double x, y;
@@ -23,24 +24,76 @@ struct Point{
 
 struct LineSegment{
     Point p, q;
+
+    LineSegment() {}
+    LineSegment(Point _p, Point _q): p(_p), q(_q) {}
+
+    int direction(){
+        if(p.x == q.x)  // parallel to Oy - vertical
+            return 0;
+        else            // parallel to Ox - horizontal
+            return 1;
+    }
+
+    double lenghth(){
+        if(direction() == 0)
+            return fabs(p.y - q.y);
+        else  
+            return fabs(p.x - q.x);
+    }
+
+    bool contain(Point t){
+        return LineSegment(p, t).lenghth() + LineSegment(q, t).lenghth() == this->lenghth();
+    }
+
+    friend ostream &operator << (ostream &out, const LineSegment &line){
+        return out << line.p.x << "," << line.p.y << " => " << line.q.x << "," << line.q.y;
+    }
 };
 
+int N, M;
 vector<Point> points;
 vector<vector<LineSegment>> polygons;
 Point I;
 
 void readFile();
-vector<vector<Point>> findRectangle(Point p);
+vector<LineSegment> getRectangle(Point p);
 
 int main(){
     readFile();
     cout << "Nhap toa do diem I: ";
     cin >> I.x >> I.y;
+
+    Point A, B, C, D;
+    A.x = I.x - 1; A.y = I.y + 3;
+    B.x = I.x + 1; B.y = I.y + 3;
+    C.x = I.x + 1; C.y = I.y - 3;
+    D.x = I.x - 1; D.y = I.y - 3;
+
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < M; j++){
+            if(polygons[i][j].direction() == 0){    // horizontal
+                if(polygons[i][j].contain(B) && polygons[i][j].contain(C)){
+                    if((int)LineSegment(polygons[i][j].p, B).lenghth() % 6 == 0){
+
+                    }
+                }
+                else if(polygons[i][j].contain(A) && polygons[i][j].contain(D)){
+
+                }
+            }
+            else{   // vertical
+                if(polygons[i][j].contain(A) && polygons[i][j].contain(B)){
+                }
+                else if(polygons[i][j].contain(C) && polygons[i][j].contain(D)){
+                }
+            }
+        }
+    }
     return 0;
 }
 
 void readFile(){
-    int N, M;
     ifstream inputFile;
     inputFile.open("input.txt");
     if(!inputFile){
@@ -78,20 +131,4 @@ void readFile(){
         }
     }
 #endif
-}
-
-vector<vector<Point>> findRectangle(Point p){
-    vector<vector<Point>> res;
-    vector<Point> rect1, rect2;
-    rect1.push_back(Point(p.x - 1, p.y - 3));
-    rect1.push_back(Point(p.x - 1, p.y + 3));
-    rect1.push_back(Point(p.x + 1, p.y - 3));
-    rect1.push_back(Point(p.x + 1, p.y + 3));
-    res.push_back(rect1);
-    rect2.push_back(Point(p.x - 3, p.y - 1));
-    rect2.push_back(Point(p.x - 3, p.y + 1));
-    rect2.push_back(Point(p.x + 3, p.y - 1));
-    rect2.push_back(Point(p.x + 3, p.y + 1));
-    res.push_back(rect2);
-    return res;
 }
