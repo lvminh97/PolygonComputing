@@ -70,12 +70,12 @@ int main(){
     C.x = I.x + 1; C.y = I.y - 3;
     D.x = I.x - 1; D.y = I.y - 3;
 
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < M; j++){
+    for(int i = 0; i < N; i++){ // Check with each polygon
+        for(int j = 0; j < M; j++){ // Check with each line segment of polygon
             if(polygons[i][j].direction() == 0){    // horizontal
                 if(polygons[i][j].contain(B) && polygons[i][j].contain(C)){
                     if((int)LineSegment(polygons[i][j].p, B).lenghth() % 6 == 0){
-
+                        if()
                     }
                 }
                 else if(polygons[i][j].contain(A) && polygons[i][j].contain(D)){
@@ -84,8 +84,10 @@ int main(){
             }
             else{   // vertical
                 if(polygons[i][j].contain(A) && polygons[i][j].contain(B)){
+
                 }
                 else if(polygons[i][j].contain(C) && polygons[i][j].contain(D)){
+
                 }
             }
         }
