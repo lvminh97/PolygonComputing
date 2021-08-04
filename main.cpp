@@ -71,7 +71,10 @@ int main(){
     D.x = I.x - 1; D.y = I.y - 3;
 
     for(int i = 0; i < N; i++){ // Check with each polygon
-        for(int j = 0; j < M; j++){ // Check with each line segment of polygon
+        for(int j = 0; j < polygons[i].size(); j++){ // Check with each line segment of polygon
+            int prevId;
+            if(j > 0) prevId = j - 1;
+            else prevId = polygons[i].size() - 1;
             if(polygons[i][j].direction() == 0){    // horizontal
                 if(polygons[i][j].contain(B) && polygons[i][j].contain(C)){
                     if((int)LineSegment(polygons[i][j].p, B).lenghth() % 6 == 0){
